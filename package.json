@@ -1,0 +1,23 @@
+{
+  "name": "boat",
+  "version": "1.0.0",
+  "description": "Hackatrain data source generator - ThaZae",
+  "main": "thailandLocationGenerator.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hackatrain/boat.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hackatrain/boat/issues"
+  },
+  "homepage": "https://github.com/hackatrain/boat#readme",
+  "dependencies": {
+    "parcel-bundler": "^1.11.0",
+    "random-location": "^1.0.12"
+  }
+}
