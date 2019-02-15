@@ -9,6 +9,10 @@ const radius = 20 * 1000;
 const provinces = JSON.parse(fs.readFileSync(path.join(__dirname, "thailand-location-raw.json")).toString());
 const locations = [];
 
+const random = (a, b) => {
+    return Math.random() * (b - a) + a;
+}
+
 provinces.forEach(province => {
     for (let i = 0; i < totalPerPlace; ++i) {
         locations.push({
@@ -16,7 +20,8 @@ provinces.forEach(province => {
             ...randomLocation.randomCirclePoint({
                 latitude: province[1],
                 longitude: province[2],
-            }, radius)
+            }, radius),
+            aqi: random(20, 220),
         })
     }
 })
