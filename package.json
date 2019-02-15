@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/hackatrain/boat#readme",
   "dependencies": {
+    "@google/maps": "^0.5.5",
     "parcel-bundler": "^1.11.0",
     "random-location": "^1.0.12"
   }
