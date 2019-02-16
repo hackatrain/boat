@@ -6,30 +6,50 @@ const googleMapsClient = require('@google/maps').createClient({
 });
 
 const curries = JSON.parse(fs.readFileSync("./curry.json").toString());
+const data = [];
 
-async function getLocation(index) {
-    if (index >= curries.length) return;
-    
-    const curry = curries[index];
-
+async function fetchLocation(place) {
     let response;
+    
     try {
-        response = await googleMapsClient.geocode({address: curry.location}).asPromise()
+        response = await googleMapsClient.geocode({address: place}).asPromise()
     } catch(e) {
-        console.error(`Error: ${e.message}`)
-        return getLocation(index + 1);
+        console.log("ERROR~~", e.message)
+        return {};
+    }
+
+    if (response.json.results[0] === undefined) {
+        return {};
     }
 
     const {lat, lng} = response.json.results[0].geometry.location;
-     
-    const data = `${curry.name},${curry.age},${curry.cost},${curry.gender},${curry.location},${curry.lineID},${curry.image},${lat},${lng}\n`;
 
-    fs.appendFile('curry-with-location.csv', data, function (err) {
-        if (err) console.error(`Error: ${err.message}`)
-
-        getLocation(index + 1);
-        console.log(`${index} - Saved! ${curry.name} at ${curry.location} - ${lat} ${lng}`)
-    });
+    return {lat, lng}
 }
 
-getLocation(0);
+async function getLocation() {
+    let index = 1;
+
+    for (let curry of curries) {
+        const locations = []
+
+        console.log(`${index++} - ${curry.name} (${curry.lineID}) ${curry.cost}THB`)
+
+        for (let location of curry.location.split(',')) {
+            locations.push(await fetchLocation(location))
+            console.log(`Location> ${location}`)
+        }
+
+        data.push({
+            ...curry,
+            location: locations,
+        })
+
+        console.log(`Finsihed ${curry.name}\n`)
+    }
+
+    console.log("DONE~");
+    fs.writeFileSync("./curry-with-location.json", JSON.stringify(data, 2, 2))
+}
+
+getLocation();
